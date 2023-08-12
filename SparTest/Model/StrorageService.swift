@@ -11,11 +11,11 @@ class StorageService: StorageServiceProtocol {
     func getCellConfiguration(with sectionType: SectionType) -> [CellConfiguration] {
         switch sectionType {
         case .stories:
-            return [CellConfiguration(image: .stories1, type: sectionType),
-                    CellConfiguration(image: .stories2, type: sectionType),
-                    CellConfiguration(image: .stories3, type: sectionType),
-                    CellConfiguration(image: .stories4, type: sectionType),
-                    CellConfiguration(image: .stories5, type: sectionType)]
+            return [CellConfiguration(image: .stories1, type: sectionType, title: "Привилегии Мой спар"),
+                    CellConfiguration(image: .stories2, type: sectionType, title: "Мы в соцсетях"),
+                    CellConfiguration(image: .stories3, type: sectionType, title: "100 000 бонусов"),
+                    CellConfiguration(image: .stories4, type: sectionType, title: "Новинки недели"),
+                    CellConfiguration(image: .stories5, type: sectionType, title: "Городецкая роспись")]
         case .sales:
             return [CellConfiguration(image: .sales1, type: sectionType),
                     CellConfiguration(image: .sales2, type: sectionType),

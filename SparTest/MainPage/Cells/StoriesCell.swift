@@ -10,17 +10,18 @@ import UIKit
 class StoriesCell: UICollectionViewCell {
     static let reuseId: String = "StoriesCell"
     
-    private lazy var categoryImage: UIImageView = {
+    private lazy var storiesImage: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = .systemGray5
         return imageView
     }()
     
-    private lazy var categoryTitle: UILabel = {
+    private lazy var storiesTitle: UILabel = {
         let label = UILabel()
         label.numberOfLines = 2
         label.textColor = .black
         label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 13)
         return label
     }()
     
@@ -35,32 +36,34 @@ class StoriesCell: UICollectionViewCell {
     }
     
     private func setupView() {
-        contentView.addSubview(categoryImage)
-        contentView.addSubview(categoryTitle)
+        contentView.addSubview(storiesImage)
+        contentView.addSubview(storiesTitle)
         
         contentView.subviews.forEach({
             $0.translatesAutoresizingMaskIntoConstraints = false
         })
         
         NSLayoutConstraint.activate([
-        categoryImage.topAnchor.constraint(equalTo: contentView.topAnchor),
-        categoryImage.widthAnchor.constraint(equalTo: contentView.heightAnchor, constant: -10),
-        categoryImage.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-        categoryImage.bottomAnchor.constraint(equalTo: categoryTitle.topAnchor, constant: 0),
+        storiesImage.topAnchor.constraint(equalTo: contentView.topAnchor),
+        storiesImage.widthAnchor.constraint(equalToConstant: contentView.bounds.width * 0.8),
+        storiesImage.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+        storiesImage.bottomAnchor.constraint(equalTo: storiesTitle.topAnchor, constant: 0),
         
-        categoryTitle.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0),
-        categoryTitle.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+        storiesTitle.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+        storiesTitle.widthAnchor.constraint(equalTo: contentView.widthAnchor),
+        storiesTitle.heightAnchor.constraint(equalToConstant: 40),
+        storiesTitle.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0),
         ])
     }
     
     func configureCell(with: CellConfiguration) {
-        categoryImage.image = with.image
-        categoryTitle.text = "text"
+        storiesImage.image = with.image
+        storiesTitle.text = with.title
     }
     
     override func prepareForReuse() {
-        categoryImage.image = nil
-        categoryTitle.text = ""
+        storiesImage.image = nil
+        storiesTitle.text = ""
     }
     
 }
