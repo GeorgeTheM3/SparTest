@@ -27,7 +27,7 @@ class StorageService: StorageServiceProtocol {
                     CellConfiguration(image: .category2, type: sectionType),
                     CellConfiguration(image: .category3, type: sectionType),
                     CellConfiguration(image: .category4, type: sectionType),
-                    CellConfiguration(image: .category5, type: sectionType)]
+                    CellConfiguration(image: .category5, type: sectionType),]
         case .recomendation:
             return [CellConfiguration(image: .recomend1, type: sectionType, header: "Рекомендуем"),
                     CellConfiguration(image: .recomend2, type: sectionType, header: "Рекомендуем"),

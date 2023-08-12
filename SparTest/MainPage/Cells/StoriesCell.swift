@@ -58,4 +58,9 @@ class StoriesCell: UICollectionViewCell {
         categoryTitle.text = "text"
     }
     
+    override func prepareForReuse() {
+        categoryImage.image = nil
+        categoryTitle.text = ""
+    }
+    
 }

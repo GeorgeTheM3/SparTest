@@ -34,4 +34,8 @@ class SweetCell: UICollectionViewCell {
     func configureCell(with: CellConfiguration) {
         otherImage.image = with.image
     }
+    
+    override func prepareForReuse() {
+        otherImage.image = nil
+    }
 }

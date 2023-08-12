@@ -33,4 +33,8 @@ class RecomendationCell: UICollectionViewCell {
     func configureCell(with: CellConfiguration) {
         recomendImage.image = with.image
     }
+    
+    override func prepareForReuse() {
+        recomendImage.image = nil
+    }
 }

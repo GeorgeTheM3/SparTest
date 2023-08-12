@@ -33,4 +33,8 @@ class CategoryCell: UICollectionViewCell {
     func configureCell(with: CellConfiguration) {
         categoryImage.image = with.image
     }
+    
+    override func prepareForReuse() {
+        categoryImage.image = nil
+    }
 }

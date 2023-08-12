@@ -36,4 +36,8 @@ class SalesCell: UICollectionViewCell {
     func configureCell(with: CellConfiguration) {
         salesImage.image = with.image
     }
+    
+    override func prepareForReuse() {
+        salesImage.image = nil
+    }
 }
