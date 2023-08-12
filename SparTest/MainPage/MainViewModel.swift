@@ -48,4 +48,13 @@ class MainViewModel {
             return other[index.row]
         }
     }
+    
+    func getTitle(for header: Headers, at index: IndexPath) -> CellConfiguration {
+        switch header {
+        case .recomend:
+            return recomendation[index.row]
+        case .sweet:
+            return other[index.row]
+        }
+    }
 }

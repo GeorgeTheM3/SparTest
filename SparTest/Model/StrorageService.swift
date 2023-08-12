@@ -29,15 +29,15 @@ class StorageService: StorageServiceProtocol {
                     CellConfiguration(image: .category4, type: sectionType),
                     CellConfiguration(image: .category5, type: sectionType)]
         case .recomendation:
-            return [CellConfiguration(image: .recomend1, type: sectionType),
-                    CellConfiguration(image: .recomend2, type: sectionType),
-                    CellConfiguration(image: .recomend3, type: sectionType),
-                    CellConfiguration(image: .recomend4, type: sectionType),]
+            return [CellConfiguration(image: .recomend1, type: sectionType, header: "Рекомендуем"),
+                    CellConfiguration(image: .recomend2, type: sectionType, header: "Рекомендуем"),
+                    CellConfiguration(image: .recomend3, type: sectionType, header: "Рекомендуем"),
+                    CellConfiguration(image: .recomend4, type: sectionType, header: "Рекомендуем"),]
         case .other:
-            return [CellConfiguration(image: .sweet1, type: sectionType),
-                    CellConfiguration(image: .sweet2, type: sectionType),
-                    CellConfiguration(image: .sweet3, type: sectionType),
-                    CellConfiguration(image: .sweet4, type: sectionType)]
+            return [CellConfiguration(image: .sweet1, type: sectionType, header: "Сладкое настроение"),
+                    CellConfiguration(image: .sweet2, type: sectionType, header: "Сладкое настроение"),
+                    CellConfiguration(image: .sweet3, type: sectionType, header: "Сладкое настроение"),
+                    CellConfiguration(image: .sweet4, type: sectionType, header: "Сладкое настроение")]
         }
     }
 }

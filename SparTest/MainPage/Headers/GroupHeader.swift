@@ -12,7 +12,6 @@ class GroupHeader: UICollectionReusableView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
-        label.text = "Header"
         return label
     }()
     
@@ -29,5 +28,9 @@ class GroupHeader: UICollectionReusableView {
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+    }
+    
+    func configureHeader(with: CellConfiguration) {
+        titleLabel.text = with.header
     }
 }

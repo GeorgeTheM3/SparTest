@@ -17,8 +17,8 @@ enum SectionType: Int, CaseIterable {
 }
 
 enum Headers: String {
-    case popular
-    case shops
+    case recomend
+    case sweet
 }
 
 struct CellConfiguration: Hashable{
@@ -29,8 +29,17 @@ struct CellConfiguration: Hashable{
     static func == (lhs: CellConfiguration, rhs: CellConfiguration) -> Bool {
         return lhs.identifier == rhs.identifier
     }
+
+    init(image: UIImage, type: SectionType, title: String = "Title", header: String = "Header") {
+        self.image = image
+        self.type = type
+        self.title = title
+        self.header = header
+    }
     
     let image: UIImage
     let type: SectionType
+    let title: String
+    let header: String
 }
 

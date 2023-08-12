@@ -40,18 +40,22 @@ class MainView: UIViewController {
         mainScreenCollectionView.register(QrCodeCell.self, forCellWithReuseIdentifier: QrCodeCell.reuseId)
         mainScreenCollectionView.register(StoriesCell.self, forCellWithReuseIdentifier: StoriesCell.reuseId)
         
-        mainScreenCollectionView.register(GroupHeader.self, forSupplementaryViewOfKind: Headers.popular.rawValue, withReuseIdentifier: Headers.popular.rawValue)
-        mainScreenCollectionView.register(GroupHeader.self, forSupplementaryViewOfKind: Headers.shops.rawValue, withReuseIdentifier: Headers.shops.rawValue)
+        mainScreenCollectionView.register(GroupHeader.self, forSupplementaryViewOfKind: Headers.recomend.rawValue, withReuseIdentifier: Headers.recomend.rawValue)
+        mainScreenCollectionView.register(GroupHeader.self, forSupplementaryViewOfKind: Headers.sweet.rawValue, withReuseIdentifier: Headers.sweet.rawValue)
         view.addSubview(mainScreenCollectionView)
     }
     
     func supplementary(collectionView: UICollectionView, kind: Headers, indexPath: IndexPath) -> UICollectionReusableView? {
         switch kind {
-        case .popular:
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: Headers.popular.rawValue, withReuseIdentifier: Headers.popular.rawValue, for: indexPath) as? GroupHeader
+        case .recomend:
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: Headers.recomend.rawValue, withReuseIdentifier: Headers.recomend.rawValue, for: indexPath) as? GroupHeader
+            let data = self.viewModel.getTitle(for: kind, at: indexPath)
+            header?.configureHeader(with: data)
             return header
-        case .shops:
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: Headers.shops.rawValue, withReuseIdentifier: Headers.shops.rawValue, for: indexPath) as? GroupHeader
+        case .sweet:
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: Headers.sweet.rawValue, withReuseIdentifier: Headers.sweet.rawValue, for: indexPath) as? GroupHeader
+            let data = self.viewModel.getTitle(for: kind, at: indexPath)
+            header?.configureHeader(with: data)
             return header
         }
     }
@@ -131,7 +135,7 @@ class MainView: UIViewController {
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
         
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.85),
                                                heightDimension: .fractionalWidth(1/3))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
@@ -160,7 +164,7 @@ class MainView: UIViewController {
                                                       heightDimension: .absolute(30))
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: headerFooterSize,
-            elementKind: Headers.shops.rawValue, alignment: .top)
+            elementKind: Headers.recomend.rawValue, alignment: .top)
         
         section.boundarySupplementaryItems = [sectionHeader]
         
@@ -168,8 +172,8 @@ class MainView: UIViewController {
     }
     
     private func otherSectionLayout() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                              heightDimension: .fractionalWidth(0.5))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/2),
+                                              heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
         
@@ -179,13 +183,13 @@ class MainView: UIViewController {
         
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 13, bottom: 5, trailing: 13)
-        section.orthogonalScrollingBehavior = .groupPagingCentered
+        section.orthogonalScrollingBehavior = .continuous
         
         let headerFooterSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                       heightDimension: .absolute(30))
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: headerFooterSize,
-            elementKind: Headers.shops.rawValue, alignment: .top)
+            elementKind: Headers.sweet.rawValue, alignment: .top)
         
         section.boundarySupplementaryItems = [sectionHeader]
         
@@ -243,7 +247,7 @@ class MainView: UIViewController {
         snapshot.appendSections(SectionType.allCases)
         
         self.dataSource.supplementaryViewProvider = { [unowned self] collectionView, kind, indexPath in
-            return self.supplementary(collectionView: collectionView, kind: Headers(rawValue: kind) ?? .popular , indexPath: indexPath)
+            return self.supplementary(collectionView: collectionView, kind: Headers(rawValue: kind) ?? .recomend , indexPath: indexPath)
         }
         
         let data = [viewModel.stories, viewModel.sales,viewModel.qrCode, viewModel.categories, viewModel.recomendation, viewModel.other]
