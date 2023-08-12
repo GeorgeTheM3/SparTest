@@ -22,7 +22,7 @@ class TabBarController: UITabBarController {
     func configureTabBar() -> [UIViewController]{
         var controllers: [UIViewController] = []
         
-        let mainController = UIViewController()
+        let mainController = MainView()
         mainController.view.backgroundColor = .white
         
         let firstController = UINavigationController(rootViewController: mainController)
