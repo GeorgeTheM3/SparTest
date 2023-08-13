@@ -9,8 +9,8 @@ import UIKit
 
 extension CALayer {
     func setShadow() {
-        shadowOffset = Constants.shadowOffset
-        shadowRadius = Constants.shadowRadius
-        shadowOpacity = Constants.shadorOpacity
+        shadowOffset = CGSize(width: 0, height: 0)
+        shadowRadius = 5
+        shadowOpacity = 0.15
     }
 }
