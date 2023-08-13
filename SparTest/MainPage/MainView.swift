@@ -187,7 +187,7 @@ class MainView: UIViewController {
         
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = sectionInsents
-        section.orthogonalScrollingBehavior = .paging
+        section.orthogonalScrollingBehavior = .continuous
         
         let headerFooterSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                       heightDimension: .absolute(30))
