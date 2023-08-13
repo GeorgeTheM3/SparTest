@@ -28,6 +28,14 @@ class SalesCell: UICollectionViewCell {
         super.init(coder: coder)
         setupView()
     }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        subviews.forEach { view in
+            view.layer.cornerRadius = Constants.cornerRadius
+            view.clipsToBounds = true
+        }
+    }
 
     private func setupView() {
         contentView.addSubview(salesImage)

@@ -34,6 +34,11 @@ extension UIImage {
         return image
     }()
     
+    static let stories6: UIImage = {
+        guard let image = UIImage(named: "stories6") else { return UIImage() }
+        return image
+    }()
+    
     //category image
     static let category1: UIImage = {
         guard let image = UIImage(named: "category1") else { return UIImage() }

@@ -30,6 +30,14 @@ class CategoryCell: UICollectionViewCell {
         contentView.addSubview(categoryImage)
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        subviews.forEach { view in
+            view.layer.cornerRadius = Constants.cornerRadius
+            view.clipsToBounds = true
+        }
+    }
+    
     func configureCell(with: CellConfiguration) {
         categoryImage.image = with.image
     }

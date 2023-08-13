@@ -120,7 +120,7 @@ class MainView: UIViewController {
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                               heightDimension: .fractionalWidth(1/4))
+                                               heightDimension: .fractionalWidth(0.28))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
@@ -211,18 +211,21 @@ class MainView: UIViewController {
                 if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SalesCell.reuseId, for: indexPath) as? SalesCell {
                     let data = self.viewModel.getInfo(for: section, at: indexPath)
                     cell.configureCell(with: data)
+                    cell.layer.setShadow()
                     return cell
                 }
             case .qrCode:
                 if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: QrCodeCell.reuseId, for: indexPath) as? QrCodeCell {
                     let data = self.viewModel.getInfo(for: section, at: indexPath)
                     cell.configureCell(with: data)
+                    cell.layer.setShadow()
                     return cell
                 }
             case .categories:
                 if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCell.reuseId, for: indexPath) as? CategoryCell {
                     let data = self.viewModel.getInfo(for: section, at: indexPath)
                     cell.configureCell(with: data)
+                    cell.layer.setShadow()
                     return cell
                 }
             case .recomendation:
@@ -230,12 +233,14 @@ class MainView: UIViewController {
                     RecomendationCell {
                     let data = self.viewModel.getInfo(for: section, at: indexPath)
                     cell.configureCell(with: data)
+                    cell.layer.setShadow()
                     return cell
                 }
             case .other:
                 if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SweetCell.reuseId, for: indexPath) as? SweetCell {
                     let data = self.viewModel.getInfo(for: section, at: indexPath)
                     cell.configureCell(with: data)
+                    cell.layer.setShadow()
                     return cell
                 }
             }
@@ -255,7 +260,7 @@ class MainView: UIViewController {
         data.forEach({
             snapshotItem(items: $0, section: $0.first?.type ?? .categories )
         })
-
+        
         func snapshotItem(items: [CellConfiguration], section: SectionType) {
             items.forEach { item in
                 snapshot.appendItems([item.hashValue], toSection: section)
@@ -277,6 +282,3 @@ extension MainView {
         }
     }
 }
-
-
-//extension UICollectionView

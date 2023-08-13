@@ -12,7 +12,8 @@ class StoriesCell: UICollectionViewCell {
     
     private lazy var storiesImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = .systemGray5
+        imageView.layer.cornerRadius = contentView.bounds.width * 0.4
+        imageView.clipsToBounds = true
         return imageView
     }()
     
@@ -45,9 +46,9 @@ class StoriesCell: UICollectionViewCell {
         
         NSLayoutConstraint.activate([
         storiesImage.topAnchor.constraint(equalTo: contentView.topAnchor),
-        storiesImage.widthAnchor.constraint(equalToConstant: contentView.bounds.width * 0.8),
         storiesImage.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-        storiesImage.bottomAnchor.constraint(equalTo: storiesTitle.topAnchor, constant: 0),
+        storiesImage.widthAnchor.constraint(equalToConstant: contentView.bounds.width * 0.8),
+        storiesImage.heightAnchor.constraint(equalToConstant: contentView.bounds.width * 0.8),
         
         storiesTitle.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
         storiesTitle.widthAnchor.constraint(equalTo: contentView.widthAnchor),

@@ -27,6 +27,14 @@ class QrCodeCell: UICollectionViewCell {
         setupView()
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        subviews.forEach { view in
+            view.layer.cornerRadius = 10
+            view.clipsToBounds = true
+        }
+    }
+    
     private func setupView() {
         contentView.addSubview(qrCodeImage)
     }
@@ -34,5 +42,4 @@ class QrCodeCell: UICollectionViewCell {
     func configureCell(with: CellConfiguration) {
         qrCodeImage.image = with.image
     }
-    
 }
