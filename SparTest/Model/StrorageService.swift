@@ -16,7 +16,7 @@ class StorageService: StorageServiceProtocol {
                     CellConfiguration(image: .stories3, type: sectionType, title: "100 000 бонусов"),
                     CellConfiguration(image: .stories4, type: sectionType, title: "Новинки недели"),
                     CellConfiguration(image: .stories5, type: sectionType, title: "Городецкая роспись"),
-                    CellConfiguration(image: .stories6, type: sectionType, title: "Гор"),]
+                    CellConfiguration(image: .stories6, type: sectionType, title: "Рецепт недели"),]
         case .sales:
             return [CellConfiguration(image: .sales1, type: sectionType),
                     CellConfiguration(image: .sales2, type: sectionType),

@@ -8,11 +8,35 @@ import UIKit
 import Combine
 
 class MainView: UIViewController {
-    private var mainScreenCollectionView: UICollectionView!
     private var viewModel: MainViewModel
     private lazy var dataSource = makeDataSource()
     
     private var cancellables = Set<AnyCancellable>()
+    
+    private var mainScreenCollectionView: UICollectionView!
+    
+    private lazy var menuButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: "line.3.horizontal"), for: .normal)
+        button.tintColor = .systemGreen
+        return button
+    }()
+    
+    private lazy var myLocationButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle(" Москва и Московская область", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.setImage(UIImage(systemName: "mappin.and.ellipse"), for: .normal)
+        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+        button.contentHorizontalAlignment = .left
+        button.tintColor = .red
+        button.layer.borderColor = UIColor.systemGray3.cgColor
+        button.backgroundColor = .white
+        button.layer.borderWidth = 1
+        button.frame = CGRect(x: 0, y: 0, width: view.frame.width - 70, height: 36)
+        button.layer.cornerRadius = button.bounds.height / 2
+        return button
+    }()
     
     init(viewModel: MainViewModel = MainViewModel()) {
         self.viewModel = viewModel
@@ -28,6 +52,12 @@ class MainView: UIViewController {
         super.viewDidLoad()
         setupCollectionView()
         setupBindings()
+        setupNavigation()
+    }
+    
+    private func setupNavigation() {
+        self.navigationItem.rightBarButtonItem = menuButton.toBarButtonItem()
+        self.navigationItem.leftBarButtonItem = myLocationButton.toBarButtonItem()
     }
     
     private func setupCollectionView() {
@@ -59,7 +89,6 @@ class MainView: UIViewController {
             return header
         }
     }
-    
     
     private func setCompositionLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout {sectionIndex,enviroment in
@@ -112,7 +141,6 @@ class MainView: UIViewController {
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = sectionInsents
         section.orthogonalScrollingBehavior = .continuous
-        
         return section
     }
     
@@ -128,7 +156,6 @@ class MainView: UIViewController {
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 18, bottom: 5, trailing: 18)
         section.orthogonalScrollingBehavior = .none
-        
         return section
     }
     
@@ -145,7 +172,6 @@ class MainView: UIViewController {
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = sectionInsents
         section.orthogonalScrollingBehavior = .continuous
-        
         return section
     }
     
@@ -168,9 +194,7 @@ class MainView: UIViewController {
         let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: headerFooterSize,
             elementKind: Headers.recomend.rawValue, alignment: .top)
-        
         section.boundarySupplementaryItems = [sectionHeader]
-        
         return section
     }
     
@@ -195,7 +219,6 @@ class MainView: UIViewController {
             elementKind: Headers.sweet.rawValue, alignment: .top)
         
         section.boundarySupplementaryItems = [sectionHeader]
-        
         return section
     }
     
@@ -268,6 +291,7 @@ class MainView: UIViewController {
                 snapshot.appendItems([item.hashValue], toSection: section)
             }
         }
+        
         self.dataSource.apply(snapshot, animatingDifferences: animated)
     }
 }
