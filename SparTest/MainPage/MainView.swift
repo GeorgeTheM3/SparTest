@@ -81,6 +81,8 @@ class MainView: UIViewController {
         return layout
     }
     
+    let sectionInsents = NSDirectionalEdgeInsets(top: 10, leading: 13, bottom: 10, trailing: 13)
+    
     private func storiesSectionLayout() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/4),
                                               heightDimension: .fractionalHeight(1))
@@ -92,7 +94,7 @@ class MainView: UIViewController {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 13, bottom: 5, trailing: 13)
+        section.contentInsets = sectionInsents
         section.orthogonalScrollingBehavior = .continuous
         return section
     }
@@ -108,7 +110,7 @@ class MainView: UIViewController {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 13, bottom: 5, trailing: 13)
+        section.contentInsets = sectionInsents
         section.orthogonalScrollingBehavior = .continuous
         
         return section
@@ -120,7 +122,7 @@ class MainView: UIViewController {
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                               heightDimension: .fractionalWidth(0.28))
+                                               heightDimension: .fractionalWidth(0.3))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
@@ -141,7 +143,7 @@ class MainView: UIViewController {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 13, bottom: 5, trailing: 13)
+        section.contentInsets = sectionInsents
         section.orthogonalScrollingBehavior = .continuous
         
         return section
@@ -158,7 +160,7 @@ class MainView: UIViewController {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 13, bottom: 5, trailing: 13)
+        section.contentInsets = sectionInsents
         section.orthogonalScrollingBehavior = .paging
         
         let headerFooterSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
@@ -183,7 +185,7 @@ class MainView: UIViewController {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 13, bottom: 5, trailing: 13)
+        section.contentInsets = sectionInsents
         section.orthogonalScrollingBehavior = .continuous
         
         let headerFooterSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),

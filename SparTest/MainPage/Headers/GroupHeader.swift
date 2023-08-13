@@ -12,6 +12,7 @@ class GroupHeader: UICollectionReusableView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .black
+        label.font = UIFont(name: "Helvetica-Bold", size: 18)
         return label
     }()
     
