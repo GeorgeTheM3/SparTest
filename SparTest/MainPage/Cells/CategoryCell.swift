@@ -6,7 +6,7 @@
 //
 import UIKit
 
-class CategoryCell: UICollectionViewCell {
+final class CategoryCell: UICollectionViewCell {
     static let reuseId: String = "CategoryCell"
     
     private lazy var categoryImage: UIImageView = {

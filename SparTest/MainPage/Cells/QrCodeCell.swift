@@ -7,7 +7,7 @@
 
 import UIKit
 
-class QrCodeCell: UICollectionViewCell {
+final class QrCodeCell: UICollectionViewCell {
     static let reuseId: String = "QrCodeCell"
     
     private lazy var qrCodeImage: UIImageView = {

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class GroupHeader: UICollectionReusableView {
+final class GroupHeader: UICollectionReusableView {
     private var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false

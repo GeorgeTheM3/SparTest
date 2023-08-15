@@ -6,7 +6,7 @@
 //
 import UIKit
 
-class RecomendationCell: UICollectionViewCell {
+final class RecomendationCell: UICollectionViewCell {
     static let reuseId: String = "RecomendationCell"
     
     private lazy var recomendImage: UIImageView = {

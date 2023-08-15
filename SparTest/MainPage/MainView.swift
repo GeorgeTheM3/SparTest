@@ -8,9 +8,8 @@ import UIKit
 import Combine
 
 final class MainView: UIViewController {
+    // MARK: Properties
     private var viewModel: MainViewModel
-//    private lazy var dataSource = makeDataSource()
-    
     private var cancellables = Set<AnyCancellable>()
     
     private var mainScreenCollectionView: UICollectionView!
@@ -38,6 +37,7 @@ final class MainView: UIViewController {
         return button
     }()
     
+    //MARK: Init
     init(viewModel: MainViewModel = MainViewModel()) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -60,6 +60,7 @@ final class MainView: UIViewController {
         self.navigationItem.leftBarButtonItem = myLocationButton.toBarButtonItem()
     }
     
+    //MARK: Setup collection view
     private func setupCollectionView() {
         let frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
         mainScreenCollectionView = UICollectionView(frame: frame, collectionViewLayout: setCompositionLayout())
@@ -77,140 +78,9 @@ final class MainView: UIViewController {
         mainScreenCollectionView.delegate = self
         view.addSubview(mainScreenCollectionView)
     }
-    
-    private func setCompositionLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout {sectionIndex,enviroment in
-            switch sectionIndex {
-            case 0:
-                return self.storiesSectionLayout()
-            case 1:
-                return self.salesSectionLayout()
-            case 2:
-                return self.qrCodeSectionLayout()
-            case 3:
-                return self.categorySectionLayout()
-            case 4:
-                return self.recomendSectionLayout()
-            default:
-                return self.otherSectionLayout()
-            }
-        }
-        return layout
-    }
-    
-    let sectionInsents = NSDirectionalEdgeInsets(top: 10, leading: 13, bottom: 10, trailing: 13)
-    
-    private func storiesSectionLayout() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/4),
-                                              heightDimension: .fractionalHeight(1))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5)
-        
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.9),
-                                               heightDimension: .fractionalWidth(0.26))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = sectionInsents
-        section.orthogonalScrollingBehavior = .continuous
-        return section
-    }
-    
-    private func salesSectionLayout() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                              heightDimension: .fractionalHeight(1))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
-        
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.9),
-                                               heightDimension: .fractionalHeight(0.2))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = sectionInsents
-        section.orthogonalScrollingBehavior = .continuous
-        return section
-    }
-    
-    private func qrCodeSectionLayout() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                              heightDimension: .fractionalHeight(1))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                               heightDimension: .fractionalWidth(0.3))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 18, bottom: 5, trailing: 18)
-        section.orthogonalScrollingBehavior = .none
-        return section
-    }
-    
-    private func categorySectionLayout() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3),
-                                              heightDimension: .fractionalHeight(1))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
-        
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.85),
-                                               heightDimension: .fractionalWidth(1/3))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = sectionInsents
-        section.orthogonalScrollingBehavior = .continuous
-        return section
-    }
-    
-    private func recomendSectionLayout() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/2),
-                                              heightDimension: .fractionalHeight(1))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
-        
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.8),
-                                               heightDimension: .fractionalWidth(0.5))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = sectionInsents
-        section.orthogonalScrollingBehavior = .continuous
-        
-        let headerFooterSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                      heightDimension: .absolute(30))
-        let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: headerFooterSize,
-            elementKind: Headers.recomend.rawValue, alignment: .top)
-        section.boundarySupplementaryItems = [sectionHeader]
-        return section
-    }
-    
-    private func otherSectionLayout() -> NSCollectionLayoutSection {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/2),
-                                              heightDimension: .fractionalHeight(1))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-        item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
-        
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.8),
-                                               heightDimension: .fractionalWidth(0.5))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-        
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = sectionInsents
-        section.orthogonalScrollingBehavior = .continuous
-        
-        let headerFooterSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                      heightDimension: .absolute(30))
-        let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: headerFooterSize,
-            elementKind: Headers.sweet.rawValue, alignment: .top)
-        
-        section.boundarySupplementaryItems = [sectionHeader]
-        return section
-    }
 }
 
+//MARK: Bindings
 extension MainView {
     private func setupBindings() {
         // берем publishers из vm и производим reloadData() когда они изменяются
@@ -231,6 +101,7 @@ extension MainView {
     }
 }
 
+//MARK: UICollectionViewDataSource
 extension MainView: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         6
@@ -309,22 +180,22 @@ extension MainView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch indexPath.section {
         case 4:
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: Headers.recomend.rawValue, withReuseIdentifier: Headers.recomend.rawValue, for: indexPath) as? GroupHeader
+            guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: Headers.recomend.rawValue, withReuseIdentifier: Headers.recomend.rawValue, for: indexPath) as? GroupHeader else { return UICollectionReusableView()}
             let data = self.viewModel.getTitle(for: .recomend, at: indexPath)
-            header?.configureHeader(with: data)
-            return header!
+            header.configureHeader(with: data)
+            return header
         case 5:
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: Headers.sweet.rawValue, withReuseIdentifier: Headers.sweet.rawValue, for: indexPath) as? GroupHeader
+            guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: Headers.sweet.rawValue, withReuseIdentifier: Headers.sweet.rawValue, for: indexPath) as? GroupHeader else { return UICollectionReusableView()}
             let data = self.viewModel.getTitle(for: .sweet, at: indexPath)
-            header?.configureHeader(with: data)
-            return header!
+            header.configureHeader(with: data)
+            return header
         default:
             return UICollectionReusableView()
         }
     }
 }
 
-
+//MARK: UICollectionViewDelegate
 extension MainView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard indexPath.row == 1 || indexPath.row == 490 else { return }
@@ -338,5 +209,137 @@ extension MainView: UICollectionViewDelegate {
         default:
             break
         }
+    }
+}
+
+//MARK: Setup compositional layout
+extension MainView {
+    private func setCompositionLayout() -> UICollectionViewLayout {
+        let layout = UICollectionViewCompositionalLayout {sectionIndex,enviroment in
+            switch sectionIndex {
+            case 0:
+                return self.storiesSectionLayout()
+            case 1:
+                return self.salesSectionLayout()
+            case 2:
+                return self.qrCodeSectionLayout()
+            case 3:
+                return self.categorySectionLayout()
+            case 4:
+                return self.recomendSectionLayout()
+            default:
+                return self.otherSectionLayout()
+            }
+        }
+        return layout
+    }
+    private func storiesSectionLayout() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/4),
+                                              heightDimension: .fractionalHeight(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.9),
+                                               heightDimension: .fractionalWidth(0.26))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = Constants.sectionInsents
+        section.orthogonalScrollingBehavior = .continuous
+        return section
+    }
+    
+    private func salesSectionLayout() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                              heightDimension: .fractionalHeight(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.9),
+                                               heightDimension: .fractionalHeight(0.2))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = Constants.sectionInsents
+        section.orthogonalScrollingBehavior = .continuous
+        return section
+    }
+    
+    private func qrCodeSectionLayout() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                              heightDimension: .fractionalHeight(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                               heightDimension: .fractionalWidth(0.3))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 18, bottom: 5, trailing: 18)
+        section.orthogonalScrollingBehavior = .none
+        return section
+    }
+    
+    private func categorySectionLayout() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3),
+                                              heightDimension: .fractionalHeight(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.85),
+                                               heightDimension: .fractionalWidth(1/3))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = Constants.sectionInsents
+        section.orthogonalScrollingBehavior = .continuous
+        return section
+    }
+    
+    private func recomendSectionLayout() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/2),
+                                              heightDimension: .fractionalHeight(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.8),
+                                               heightDimension: .fractionalWidth(0.5))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = Constants.sectionInsents
+        section.orthogonalScrollingBehavior = .continuous
+        
+        let headerFooterSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                      heightDimension: .absolute(30))
+        let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerFooterSize,
+            elementKind: Headers.recomend.rawValue, alignment: .top)
+        section.boundarySupplementaryItems = [sectionHeader]
+        return section
+    }
+    
+    private func otherSectionLayout() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/2),
+                                              heightDimension: .fractionalHeight(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.8),
+                                               heightDimension: .fractionalWidth(0.5))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = Constants.sectionInsents
+        section.orthogonalScrollingBehavior = .continuous
+        
+        let headerFooterSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                      heightDimension: .absolute(30))
+        let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerFooterSize,
+            elementKind: Headers.sweet.rawValue, alignment: .top)
+        
+        section.boundarySupplementaryItems = [sectionHeader]
+        return section
     }
 }

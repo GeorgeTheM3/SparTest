@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-class MainViewModel {
+final class MainViewModel {
     private let storageService: StorageServiceProtocol
     
     @Published var stories: [CellConfiguration] = []

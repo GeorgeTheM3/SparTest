@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SweetCell: UICollectionViewCell {
+final class SweetCell: UICollectionViewCell {
     static let reuseId: String = "SweetCell"
     
     private lazy var otherImage: UIImageView = {

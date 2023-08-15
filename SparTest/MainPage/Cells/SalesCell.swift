@@ -9,7 +9,7 @@ import Foundation
 
 import UIKit
 
-class SalesCell: UICollectionViewCell {
+final class SalesCell: UICollectionViewCell {
     static let reuseId: String = "SalesCell"
     
     private lazy var salesImage: UIImageView = {
