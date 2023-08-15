@@ -22,11 +22,19 @@ class MainViewModel {
         self.storageService = storageService
         getStartInfo()
     }
+    
+    private func addNewStories() -> CellConfiguration{
+        return CellConfiguration(image: .stories1, type: .stories, title: "Новая история")
+    }
  
     func getStartInfo() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+            self.stories.append(self.addNewStories())
+            self.stories.append(self.addNewStories())
+        })
         self.stories = self.storageService.getCellConfiguration(with: .stories)
-        self.sales = self.storageService.getCellConfiguration(with: .sales)
         self.qrCode = self.storageService.getCellConfiguration(with: .qrCode)
+        self.sales = self.storageService.getCellConfiguration(with: .sales)
         self.categories = self.storageService.getCellConfiguration(with: .categories)
         self.recomendation = self.storageService.getCellConfiguration(with: .recomendation)
         self.other = self.storageService.getCellConfiguration(with: .other)

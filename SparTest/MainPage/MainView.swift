@@ -7,9 +7,9 @@
 import UIKit
 import Combine
 
-class MainView: UIViewController {
+final class MainView: UIViewController {
     private var viewModel: MainViewModel
-    private lazy var dataSource = makeDataSource()
+//    private lazy var dataSource = makeDataSource()
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -72,22 +72,10 @@ class MainView: UIViewController {
         
         mainScreenCollectionView.register(GroupHeader.self, forSupplementaryViewOfKind: Headers.recomend.rawValue, withReuseIdentifier: Headers.recomend.rawValue)
         mainScreenCollectionView.register(GroupHeader.self, forSupplementaryViewOfKind: Headers.sweet.rawValue, withReuseIdentifier: Headers.sweet.rawValue)
+        
+        mainScreenCollectionView.dataSource = self
+        mainScreenCollectionView.delegate = self
         view.addSubview(mainScreenCollectionView)
-    }
-    
-    func supplementary(collectionView: UICollectionView, kind: Headers, indexPath: IndexPath) -> UICollectionReusableView? {
-        switch kind {
-        case .recomend:
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: Headers.recomend.rawValue, withReuseIdentifier: Headers.recomend.rawValue, for: indexPath) as? GroupHeader
-            let data = self.viewModel.getTitle(for: kind, at: indexPath)
-            header?.configureHeader(with: data)
-            return header
-        case .sweet:
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: Headers.sweet.rawValue, withReuseIdentifier: Headers.sweet.rawValue, for: indexPath) as? GroupHeader
-            let data = self.viewModel.getTitle(for: kind, at: indexPath)
-            header?.configureHeader(with: data)
-            return header
-        }
     }
     
     private func setCompositionLayout() -> UICollectionViewLayout {
@@ -221,90 +209,134 @@ class MainView: UIViewController {
         section.boundarySupplementaryItems = [sectionHeader]
         return section
     }
-    
-    private func makeDataSource() -> UICollectionViewDiffableDataSource<SectionType, CellConfiguration > {
-        return UICollectionViewDiffableDataSource(collectionView: mainScreenCollectionView, cellProvider: { collectionView,indexPath,itemIdentifier in
-            let section = SectionType(rawValue: indexPath.section)!
-            switch section {
-            case .stories:
-                if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoriesCell.reuseId, for: indexPath) as? StoriesCell {
-                    let data = self.viewModel.getInfo(for: section, at: indexPath)
-                    cell.configureCell(with: data)
-                    return cell
-                }
-            case .sales:
-                if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SalesCell.reuseId, for: indexPath) as? SalesCell {
-                    let data = self.viewModel.getInfo(for: section, at: indexPath)
-                    cell.configureCell(with: data)
-                    cell.layer.setShadow()
-                    return cell
-                }
-            case .qrCode:
-                if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: QrCodeCell.reuseId, for: indexPath) as? QrCodeCell {
-                    let data = self.viewModel.getInfo(for: section, at: indexPath)
-                    cell.configureCell(with: data)
-                    cell.layer.setShadow()
-                    return cell
-                }
-            case .categories:
-                if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCell.reuseId, for: indexPath) as? CategoryCell {
-                    let data = self.viewModel.getInfo(for: section, at: indexPath)
-                    cell.configureCell(with: data)
-                    cell.layer.setShadow()
-                    return cell
-                }
-            case .recomendation:
-                if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecomendationCell.reuseId, for: indexPath) as?
-                    RecomendationCell {
-                    let data = self.viewModel.getInfo(for: section, at: indexPath)
-                    cell.configureCell(with: data)
-                    cell.layer.setShadow()
-                    return cell
-                }
-            case .other:
-                if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SweetCell.reuseId, for: indexPath) as? SweetCell {
-                    let data = self.viewModel.getInfo(for: section, at: indexPath)
-                    cell.configureCell(with: data)
-                    cell.layer.setShadow()
-                    return cell
-                }
-            }
-            return UICollectionViewCell()
-        })
-    }
-    
-    func updateDataSource(animated: Bool) {
-        var snapshot = NSDiffableDataSourceSnapshot<SectionType, CellConfiguration >()
-        snapshot.appendSections(SectionType.allCases)
-        
-        self.dataSource.supplementaryViewProvider = { [unowned self] collectionView, kind, indexPath in
-            return self.supplementary(collectionView: collectionView, kind: Headers(rawValue: kind) ?? .recomend , indexPath: indexPath)
-        }
-        
-        let data = [viewModel.stories, viewModel.sales,viewModel.qrCode, viewModel.categories, viewModel.recomendation, viewModel.other]
-        data.forEach({
-            snapshotItem(items: $0, section: $0.first?.type ?? .categories )
-        })
-        
-        func snapshotItem(items: [CellConfiguration], section: SectionType) {
-            items.forEach { item in
-                snapshot.appendItems([item], toSection: section)
-            }
-        }
-        
-        self.dataSource.apply(snapshot, animatingDifferences: animated)
-    }
 }
 
 extension MainView {
     private func setupBindings() {
-        // берем publishers из vm и производим updateDataSource когда они изменяются
-        let publishers = [viewModel.$stories, viewModel.$stories, viewModel.$qrCode, viewModel.$categories, viewModel.$recomendation, viewModel.$other]
-        publishers.forEach {
-            $0.sink { _ in
-                self.updateDataSource(animated: true)
-            }
+        // берем publishers из vm и производим reloadData() когда они изменяются
+        viewModel.$stories
+            .receive(on: RunLoop.main)
+            .sink(receiveValue: { _ in self.mainScreenCollectionView.reloadData()})
             .store(in: &cancellables)
+        
+        viewModel.$recomendation
+            .receive(on: RunLoop.main)
+            .sink(receiveValue: { _ in self.mainScreenCollectionView.reloadData()})
+            .store(in: &cancellables)
+        
+        viewModel.$other
+            .receive(on: RunLoop.main)
+            .sink(receiveValue: { _ in self.mainScreenCollectionView.reloadData()})
+            .store(in: &cancellables)
+    }
+}
+
+extension MainView: UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        6
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        switch section {
+        case 0:
+            return viewModel.stories.count
+        case 1:
+            return viewModel.sales.count * 100
+        case 2:
+            return viewModel.qrCode.count
+        case 3:
+            return viewModel.categories.count
+        case 4:
+            return viewModel.recomendation.count * 100
+        case 5:
+            return viewModel.other.count * 100
+        default:
+            return 0
+        }
+    }
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let section = SectionType(rawValue: indexPath.section)!
+        switch section {
+        case .stories:
+            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoriesCell.reuseId, for: indexPath) as? StoriesCell {
+                let data = self.viewModel.getInfo(for: section, at: indexPath)
+                cell.configureCell(with: data)
+                return cell
+            }
+        case .sales:
+            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SalesCell.reuseId, for: indexPath) as? SalesCell {
+                let data = self.viewModel.sales
+                let itemToShow = data[indexPath.row % data.count]
+                cell.configureCell(with: itemToShow)
+                cell.layer.setShadow()
+                return cell
+            }
+        case .qrCode:
+            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: QrCodeCell.reuseId, for: indexPath) as? QrCodeCell {
+                let data = self.viewModel.getInfo(for: section, at: indexPath)
+                cell.configureCell(with: data)
+                cell.layer.setShadow()
+                return cell
+            }
+        case .categories:
+            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CategoryCell.reuseId, for: indexPath) as? CategoryCell {
+                let data = self.viewModel.getInfo(for: section, at: indexPath)
+                cell.configureCell(with: data)
+                cell.layer.setShadow()
+                return cell
+            }
+        case .recomendation:
+            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecomendationCell.reuseId, for: indexPath) as?
+                RecomendationCell {
+                let data = self.viewModel.recomendation
+                let itemToShow = data[indexPath.row % data.count]
+                cell.configureCell(with: itemToShow)
+                cell.layer.setShadow()
+                return cell
+            }
+        case .other:
+            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SweetCell.reuseId, for: indexPath) as? SweetCell {
+                let data = self.viewModel.other
+                let itemToShow = data[indexPath.row % data.count]
+                cell.configureCell(with: itemToShow)
+                cell.layer.setShadow()
+                return cell
+            }
+        }
+        return UICollectionViewCell()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        switch indexPath.section {
+        case 4:
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: Headers.recomend.rawValue, withReuseIdentifier: Headers.recomend.rawValue, for: indexPath) as? GroupHeader
+            let data = self.viewModel.getTitle(for: .recomend, at: indexPath)
+            header?.configureHeader(with: data)
+            return header!
+        case 5:
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: Headers.sweet.rawValue, withReuseIdentifier: Headers.sweet.rawValue, for: indexPath) as? GroupHeader
+            let data = self.viewModel.getTitle(for: .sweet, at: indexPath)
+            header?.configureHeader(with: data)
+            return header!
+        default:
+            return UICollectionReusableView()
+        }
+    }
+}
+
+
+extension MainView: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard indexPath.row == 1 || indexPath.row == 490 else { return }
+        switch indexPath.section {
+        case 1:
+            collectionView.scrollToItem(at: IndexPath(row: 250, section: 1), at: .centeredHorizontally, animated: false)
+        case 4:
+            collectionView.scrollToItem(at: IndexPath(row: 250, section: 4), at: .left, animated: false)
+        case 5:
+            collectionView.scrollToItem(at: IndexPath(row: 250, section: 5), at: .left, animated: false)
+        default:
+            break
         }
     }
 }
