@@ -222,7 +222,7 @@ class MainView: UIViewController {
         return section
     }
     
-    private func makeDataSource() -> UICollectionViewDiffableDataSource<SectionType, Int > {
+    private func makeDataSource() -> UICollectionViewDiffableDataSource<SectionType, CellConfiguration > {
         return UICollectionViewDiffableDataSource(collectionView: mainScreenCollectionView, cellProvider: { collectionView,indexPath,itemIdentifier in
             let section = SectionType(rawValue: indexPath.section)!
             switch section {
@@ -274,7 +274,7 @@ class MainView: UIViewController {
     }
     
     func updateDataSource(animated: Bool) {
-        var snapshot = NSDiffableDataSourceSnapshot<SectionType, Int >()
+        var snapshot = NSDiffableDataSourceSnapshot<SectionType, CellConfiguration >()
         snapshot.appendSections(SectionType.allCases)
         
         self.dataSource.supplementaryViewProvider = { [unowned self] collectionView, kind, indexPath in
@@ -288,7 +288,7 @@ class MainView: UIViewController {
         
         func snapshotItem(items: [CellConfiguration], section: SectionType) {
             items.forEach { item in
-                snapshot.appendItems([item.hashValue], toSection: section)
+                snapshot.appendItems([item], toSection: section)
             }
         }
         
